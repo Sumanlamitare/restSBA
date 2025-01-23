@@ -1,14 +1,19 @@
 const express = require("express");
 const app = express();
 const port = 3000;
+const routes = require("./routes/apiRoutes.js");
 
-// import routes
+//importing body parser
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ extended: true }));
+//welcome page get
 
-// const userRoutes = require("./routes/users.js");
-// const postRoutes = require("./routes/posts.js");
-// const commentRoutes = require("./Datas/comments.js");
+app.get("/", (req, res) => {
+  res.send("Welcome to Rest APP");
+});
 
-//create route for users
+app.use("/", routes);
 
 // set up the server
 app.listen(port, () => {

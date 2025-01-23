@@ -173,11 +173,13 @@ router.delete("/comments/:id", (req, res) => {
     }
   }
   if (indexUser === -1) {
-    return res.status(404).send(`The user with id: ${id} does not exist.`);
+    return res.status(404).send(`The comment with id: ${id} does not exist.`);
   }
   commentsData.splice(indexUser, 1);
 
-  res.status(200).json({ message: `User with ID ${id} deleted successfully.` });
+  res
+    .status(200)
+    .json({ message: `Comment with ID ${id} deleted successfully.` });
 });
 
 // patch routes

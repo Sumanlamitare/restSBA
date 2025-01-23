@@ -7,6 +7,16 @@ const routes = require("./routes/apiRoutes.js");
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ extended: true }));
+
+//log requests
+app.use((req, res, next) => {
+  const date = new Date();
+  console.log(
+    `The request to ${req.method} ${req.originalUrl} was made at ${date}`
+  );
+  next();
+});
+
 //welcome page get
 
 app.get("/", (req, res) => {
@@ -14,6 +24,13 @@ app.get("/", (req, res) => {
 });
 
 app.use("/", routes);
+
+app.use((req, res, next) => {
+  res.status(404).json({
+    message: `Route ${req.originalUrl} not found`,
+    status: 404,
+  });
+});
 
 // set up the server
 app.listen(port, () => {

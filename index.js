@@ -20,12 +20,30 @@ app.use((req, res, next) => {
 //welcome page get
 
 app.get("/", (req, res) => {
-  res.send("Welcome to Rest APP");
+  res.json({
+    Name: "Express Application",
+    Aurthur: "Suman Lamitare",
+    Message: "Welcome to Express application",
+    Instruction:
+      "Add /users in the URL to get all the users. /user/id to get specific users. Follow the same format for Posts and Comments",
+    Date: new Date().toDateString(),
+    Time: new Date().toLocaleString(),
+  });
 });
 
 app.use("/", routes);
 
-app.use((req, res, next) => {
+app.use((err, req, res, next) => {
+  if (err.message) {
+    // err.status = 500;
+    res.json({
+      Status: `This is the status code ${err.status}. `,
+      error: err.message,
+    });
+  }
+});
+
+app.use((req, res) => {
   res.status(404).json({
     message: `Route ${req.originalUrl} not found`,
     status: 404,

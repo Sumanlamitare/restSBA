@@ -25,35 +25,43 @@ router.get("/comments", (req, res) => {
 //route to get the user with specific id
 
 //user with ID
-router.get("/users/:id", (req, res) => {
+router.get("/users/:id", (req, res, next) => {
   const id = parseInt(req.params.id);
   for (let i = 0; i < usersData.length; i++) {
     if (usersData[i].id === id) {
       return res.json(usersData[i]);
     }
   }
+  const error = new Error(`The User with id: ${id} does not exist`);
+  error.status = 500;
 
-  res.send(`The user with id: ${id} does not exist`);
+  return next(error);
 });
 // posts with id
-router.get("/posts/:id", (req, res) => {
+router.get("/posts/:id", (req, res, next) => {
   const id = parseInt(req.params.id);
   for (let i = 0; i < postsData.length; i++) {
     if (postsData[i].id === id) {
       return res.json(postsData[i]);
     }
   }
-  res.send(`The Post with id: ${id} does not exist`);
+  const error = new Error(`The Post with id: ${id} does not exist`);
+  error.status = 500;
+
+  return next(error);
 });
 //comments with id
-router.get("/comments/:id", (req, res) => {
+router.get("/comments/:id", (req, res, next) => {
   const id = parseInt(req.params.id);
   for (let i = 0; i < commentsData.length; i++) {
     if (commentsData[i].id === id) {
       return res.json(commentsData[i]);
     }
   }
-  res.status(404).send(`The comment with id: ${id} does not exist`);
+  const error = new Error(`The Comment with id: ${id} does not exist`);
+  error.status = 500;
+
+  return next(error);
 });
 
 //post routes
@@ -126,7 +134,7 @@ router.post("/comments", (req, res) => {
 
 //user delete
 
-router.delete("/users/:id", (req, res) => {
+router.delete("/users/:id", (req, res, next) => {
   const id = parseInt(req.params.id);
   let indexUser = -1;
   for (let i = 0; i < usersData.length; i++) {
@@ -136,7 +144,10 @@ router.delete("/users/:id", (req, res) => {
     }
   }
   if (indexUser === -1) {
-    return res.status(404).send(`The user with id: ${id} does not exist.`);
+    const error = new Error(`The User with id: ${id} does not exist`);
+    error.status = 500;
+
+    return next(error);
   }
   usersData.splice(indexUser, 1);
 
@@ -144,7 +155,7 @@ router.delete("/users/:id", (req, res) => {
 });
 
 //post delete
-router.delete("/posts/:id", (req, res) => {
+router.delete("/posts/:id", (req, res, next) => {
   const id = parseInt(req.params.id);
   let indexUser = -1;
   for (let i = 0; i < postsData.length; i++) {
@@ -154,7 +165,10 @@ router.delete("/posts/:id", (req, res) => {
     }
   }
   if (indexUser === -1) {
-    return res.status(404).send(`The post with id: ${id} does not exist.`);
+    const error = new Error(`The Post with id: ${id} does not exist`);
+    error.status = 500;
+
+    return next(error);
   }
   postsData.splice(indexUser, 1);
 
@@ -163,7 +177,7 @@ router.delete("/posts/:id", (req, res) => {
 
 //comments delete
 
-router.delete("/comments/:id", (req, res) => {
+router.delete("/comments/:id", (req, res, next) => {
   const id = parseInt(req.params.id);
   let indexUser = -1;
   for (let i = 0; i < commentsData.length; i++) {
@@ -173,7 +187,10 @@ router.delete("/comments/:id", (req, res) => {
     }
   }
   if (indexUser === -1) {
-    return res.status(404).send(`The comment with id: ${id} does not exist.`);
+    const error = new Error(`The Comment with id: ${id} does not exist`);
+    error.status = 500;
+
+    return next(error);
   }
   commentsData.splice(indexUser, 1);
 
@@ -184,7 +201,7 @@ router.delete("/comments/:id", (req, res) => {
 
 // patch routes
 //user patch
-router.patch("/users/:id", (req, res) => {
+router.patch("/users/:id", (req, res, next) => {
   const id = parseInt(req.params.id);
 
   for (let i = 0; i < usersData.length; i++) {
@@ -195,12 +212,15 @@ router.patch("/users/:id", (req, res) => {
       return res.status(200).json({ message: "Successfully updated" });
     }
   }
-  res.status(400).json({ message: `The User with id: ${id} does not exist` });
+  const error = new Error(`The User with id: ${id} does not exist`);
+  error.status = 500;
+
+  return next(error);
 });
 
 //post patch
 
-router.patch("/posts/:id", (req, res) => {
+router.patch("/posts/:id", (req, res, next) => {
   const id = parseInt(req.params.id);
 
   for (let i = 0; i < postsData.length; i++) {
@@ -211,11 +231,14 @@ router.patch("/posts/:id", (req, res) => {
       return res.status(200).json({ message: "Successfully updated" });
     }
   }
-  res.status(400).json({ message: `The post with id: ${id} does not exist` });
+  const error = new Error(`The Post with id: ${id} does not exist`);
+  error.status = 500;
+
+  return next(error);
 });
 
 //comments patch
-router.patch("/comments/:id", (req, res) => {
+router.patch("/comments/:id", (req, res, next) => {
   const id = parseInt(req.params.id);
 
   for (let i = 0; i < commentsData.length; i++) {
@@ -227,7 +250,10 @@ router.patch("/comments/:id", (req, res) => {
     }
   }
 
-  res.status(400).json({ message: `The post with id: ${id} does not exist` });
+  const error = new Error(`The Comment with id: ${id} does not exist`);
+  error.status = 500;
+
+  return next(error);
 });
 
 module.exports = router;
